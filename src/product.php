@@ -1,48 +1,41 @@
 <?php
 	namespace Main\Product;
-	require_once ROOT_PATH."/src/db.php";
 
 	abstract class Products {
-
-		protected $productType;
 		protected $sku;
 		protected $name;
 		protected $price;
-		protected $size;
-		protected $height;
-		protected $width;
-		protected $length;
-		protected $weight;
-		protected $id;
+		protected $conn;
+		protected $error = [];
+		protected static $DB_SERVER = 'localhost';
+		protected static $DB_USERNAME = 'root';
+		protected static $DB_PASSWORD = '';
+		protected static $DB_DATABASE = 'scandiwebjwd';
 
-		function __construct ($data) {
-			foreach ($data as $key => $value) {
-				# code...
-				$get = htmlspecialchars($value);
-				$get = stripslashes($get);
-				$get = trim($get);
-				$this->$key = "$get";
-			}
+		function __construct () { }
+
+		// Public == 
+		public function setSKU ($data) {
+			$this->sku = trim($data);
+		}
+		public function setName ($data) {
+			$this->name = trim($data);
+		}
+		public function setPrice ($data) {
+			$this->price = trim($data);
 		}
 
-		// Protected ==
-		protected function random_strings($length_of_string){
-			$str_result = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
-			return substr(str_shuffle($str_result), 0, $length_of_string);
+		// Protected == 
+		protected function getSKU () {
+			return $this->sku;
 		}
-		protected function isEmpty($value){
-			return (int)empty($value);
+		protected function getName () {
+			return $this->name;
 		}
-		public function __set($property,$value){
-			$this->$property = $value;
+		protected function getPrice () {
+			return $this->price;
 		}
-		public function __get($property){
-			return $this->$property;
-		}
-		public function __isset($property){
-			return isset($this->$property);
-		}
-		
+
 	}
 
 ?>
