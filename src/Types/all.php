@@ -5,19 +5,10 @@
 	use Main\Product\Products as Products;
 	
 	class All extends Products {
-		
-		private $id;
 
 		function __construct ($data) {
-			foreach ($data as $key => $value) {
-				# code...
-				$get = htmlspecialchars($value);
-				$get = stripslashes($get);
-				$get = trim($get);
-				$$key = "$get";
-			}
-			$this->setId($id);
-			$this->conn = new \mysqli(self::$DB_SERVER, self::$DB_USERNAME, self::$DB_PASSWORD, self::$DB_DATABASE);
+			parent::__construct();
+			$this->setId($data["id"]);
 		}
 
 		// Public == 
@@ -43,12 +34,6 @@
 				array_push($rows,$row);
 			}
 			echo json_encode(["code"=>true, "message"=>"Successful", "data"=>$rows]);
-		}
-		public function setId ($data) {
-			$this->id = trim($data);
-		}
-		public function getId () {
-			return $this->id;
 		}
 		public function deleteProducts () {
 			$q = "DELETE FROM products WHERE id IN (".$this->getId().")";

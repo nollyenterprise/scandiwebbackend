@@ -1,6 +1,8 @@
 <?php
-    if($_SERVER["HTTP_ORIGIN"] == 'http://localhost:3000' || 'https://scandiwebjwd.herokuapp.com')
-        header('Access-Control-Allow-Origin: '.$_SERVER["HTTP_ORIGIN"]);
+    if(isset($_SERVER["HTTP_ORIGIN"])){
+        if($_SERVER["HTTP_ORIGIN"] == 'http://localhost:3000' || 'https://scandiwebjwd.herokuapp.com')
+            header('Access-Control-Allow-Origin: '.$_SERVER["HTTP_ORIGIN"]);
+    }
     header("Access-Control-Allow-Headers: Content-Type");
 
     if ($_SERVER['REQUEST_METHOD'] !== 'POST')
@@ -11,17 +13,10 @@
     
     //code...
     include_once "PSR4Autoloader.php";
-    
-    foreach ($data as $key => $value) {
-        # code...
-        $get = htmlspecialchars($value);
-        $get = stripslashes($get);
-        $get = trim($get);
-        $$key = "$get";
-    }
 
-    $actions = '\Main\\Product\\Types\\'.$productType;
+    $actions = '\Main\\Product\\Types\\'.trim($data["productType"]);
     $obj = new $actions($data);
+    $action = trim($data["action"]);
     $obj->$action();
 
 ?>

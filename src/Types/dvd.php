@@ -6,65 +6,20 @@
 	
 	class DVD extends Products {
 		
-        private $size;
-        private $type;
 		private static $fields = ["sku", "name", "price", "type", "size"];
 
 		function __construct ($data) {
-			foreach ($data as $key => $value) {
-				# code...
-				$get = htmlspecialchars($value);
-				$get = stripslashes($get);
-				$get = trim($get);
-				$$key = "$get";
-			}
-			$this->setSKU($sku);
-			$this->setName($name);
-			$this->setPrice($price);
-			$this->setSize($size);
+			parent::__construct();
+			$this->setSKU($data["sku"]);
+			$this->setName($data["name"]);
+			$this->setPrice($data["price"]);
+			$this->setSize($data["size"]);
 			$this->setType(1);
-			$this->conn = new \mysqli(self::$DB_SERVER, self::$DB_USERNAME, self::$DB_PASSWORD, self::$DB_DATABASE);
 		}
 
-		// Private == 
-		private function setError ($key, $value){
-			$this->error[$key] = $value;
-		}
-		private function checkSKUExist($data) {
-			$q = "SELECT 1 FROM products WHERE sku = ?";
-			$stmt = $this->conn->prepare($q);
-			$stmt->bind_param("s", $data);
-			$stmt->execute();
-			$result = $stmt->get_result(); // $result is of type mysqli_result
-			$num_rows = $result->num_rows;  // count number of rows in the result
-			return $num_rows;
-		}
-
-		public function __call($method,$args){
-			// Do nothing ==
-		}
-		public function validation () {
-			foreach(self::$fields as $field){
-				if(empty($this->$field))
-					$this->setError($field, "$field must be provided!");
-				if($field == "sku" && !empty($this->$field) && $this->checkSKUExist($this->$field))
-					$this->setError($field, "$field provided exists!");
-			}
-		}
-		public function setSize ($data) {
-			$this->size = trim($data);
-		}
-		public function getSize () {
-			return $this->size;
-		}
-		public function setType ($data) {
-			$this->type = trim($data);
-		}
-		public function getType () {
-			return $this->type;
-		}
+		// Public == 
 		public function save () {
-			$this->validation();
+			$this->validation(self::$fields);
 			if($this->error){
 				echo json_encode(["code"=>false, "message"=>implode("<br /> ",$this->error), "data"=>null]); 
 				exit;
